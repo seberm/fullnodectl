@@ -1,5 +1,8 @@
-
 import argparse
+import importlib
+import logging
+
+log = logging.getLogger(__name__)
 
 
 def main():
@@ -21,26 +24,35 @@ def main():
         required=True,
     )
 
-    p_module = module_subparsers.add_parser("node", help="Current fullnode actions")
-    node_action_subparsers = p_module.add_subparsers(
+    p_node = module_subparsers.add_parser("node", help="Current fullnode actions")
+    subp_node = p_node.add_subparsers(
         dest="action",
         help="Action name",
         required=True,
     )
-    p_info = node_action_subparsers.add_parser("info", help="Print node information")
+    subp_node.add_parser("info", help="Print node information")
 
-    #b_parser = p_bitcoin.add_subparsers(
-    #    dest="action",
-    #    help="Action name",
-    #    required=True,
-    #)
-    #b_parser.add_argument("fees", help="Get current transaction fees")
-    #b_parser.add_argument("tx", "transaction", help="Get current transaction fees")
+    p_bitcoin = module_subparsers.add_parser("bitcoin", help="Bitcoin related operations")
+    subp_bitcoin = p_bitcoin.add_subparsers(
+        dest="action",
+        help="Action name",
+        required=True,
+    )
+    subp_bitcoin.add_parser("fees", help="Get current transaction fees")
+    p_tx = subp_bitcoin.add_parser("tx", help="Get information about specific transaction by its TXID")
+    p_tx.add_argument("txid", help="Transaction ID (TXID)")
 
     args = parser.parse_args()
-    #print(vars(args))
 
-    from fullnodectl.modules import node
-    act = node.ACTIONS.get(args.action)
+    module_str = f"fullnodectl.modules.{args.module}"
 
-    act(args)
+    try:
+        module = importlib.import_module(module_str)
+    except ModuleNotFoundError as e:
+        print(dir(e))
+        log.error(f"Module '{args.module}' was not found in '{e.name}'")
+        # FIXME: raise FullNodeCTLError
+        raise
+
+    action = module.ACTIONS.get(args.action)
+    action(args)
