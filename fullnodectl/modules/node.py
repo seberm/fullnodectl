@@ -48,7 +48,7 @@ def add_service(service, make_info):
         infos[service] = info
 
 
-def action_info():
+def action_info(args):
     if is_enabled("onion-adresses") and not is_active("onion-adresses"):
         print("error: service 'onion-adresses' is not running")
         exit(1)

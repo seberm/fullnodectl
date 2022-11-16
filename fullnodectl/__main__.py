@@ -36,4 +36,4 @@ def main():
     from fullnodectl.modules import node
     act = node.ACTIONS.get(args.action)
 
-    act()
+    act(args)
