@@ -8,6 +8,13 @@ def main():
         allow_abbrev=False,
     )
 
+    parser.add_argument(
+        "-c",
+        "--config",
+        action="store",
+        help="Path to configuration file",
+    )
+
     module_subparsers = parser.add_subparsers(
         dest="module",
         help="Module name",
