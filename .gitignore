@@ -1,0 +1,4 @@
+# Python3 cache files
+__pycache__/
+
+\.coverage.*
