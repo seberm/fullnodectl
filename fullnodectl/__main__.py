@@ -41,6 +41,7 @@ def main():
         required=True,
     )
 
+    logging.basicConfig(level=DEFAULT_LOGGING_LEVEL)
     loaded_modules = mod.get_and_register_available_modules()
 
     for module in loaded_modules:

@@ -71,7 +71,7 @@ def load(filename):
 def callback(hook, *argv, **kwargs):
     for module, opts in _REGISTERED_MODULES:
         try:
-            log.debug(f"Calling '{hook}' callback of {module.__name__} module. Args: %s", locals())
+            log.debug(f"Calling '{hook}' callback of '{module.__name__}' module. Args: %s", locals())
             module.MODULE_HOOKS[hook](*argv, **kwargs)
         except KeyError:
             # Ignoring, the hook is not registered in the module
