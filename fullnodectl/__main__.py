@@ -1,14 +1,31 @@
 import argparse
-import importlib
 import logging
 
+from fullnodectl import (
+    mod,
+    errors,
+)
+
 log = logging.getLogger(__name__)
+
+
+DEFAULT_LOGGING_LEVEL = "DEBUG"
 
 
 def main():
     parser = argparse.ArgumentParser(
         description="TODO",
         allow_abbrev=False,
+    )
+
+    parser.add_argument(
+        "-l",
+        "--log",
+        action="store",
+        type=str.upper,
+        help="Logging level.",
+        choices=["DEBUG", "WARNING", "INFO", "ERROR", "EXCEPTION"],
+        default=DEFAULT_LOGGING_LEVEL,
     )
 
     parser.add_argument(
@@ -24,35 +41,22 @@ def main():
         required=True,
     )
 
-    p_node = module_subparsers.add_parser("node", help="Current fullnode actions")
-    subp_node = p_node.add_subparsers(
-        dest="action",
-        help="Action name",
-        required=True,
-    )
-    subp_node.add_parser("info", help="Print node information")
+    loaded_modules = mod.get_and_register_available_modules()
 
-    p_bitcoin = module_subparsers.add_parser("bitcoin", help="Bitcoin related operations")
-    subp_bitcoin = p_bitcoin.add_subparsers(
-        dest="action",
-        help="Action name",
-        required=True,
-    )
-    subp_bitcoin.add_parser("fees", help="Get current transaction fees")
-    p_tx = subp_bitcoin.add_parser("tx", help="Get information about specific transaction by its TXID")
-    p_tx.add_argument("txid", help="Transaction ID (TXID)")
+    for module in loaded_modules:
+        module_parser = module_subparsers.add_parser(module.MODULE_NAME, help=f"{module.MODULE_NAME} operations")
+        mod.callback(mod.HOOK_INIT_PARSERS, module_parser)
 
     args = parser.parse_args()
 
-    module_str = f"fullnodectl.modules.{args.module}"
+    # Setup the logging
+    logging.basicConfig(level=args.log)
+
+    mod.callback(mod.HOOK_INIT, args)
 
     try:
-        module = importlib.import_module(module_str)
-    except ModuleNotFoundError as e:
-        print(dir(e))
-        log.error(f"Module '{args.module}' was not found in '{e.name}'")
-        # FIXME: raise FullNodeCTLError
-        raise
-
-    action = module.ACTIONS.get(args.action)
-    action(args)
+        return mod.callback(mod.HOOK_RUN, args)
+    except errors.FullNodeCTLError as e:
+        log.error(e)
+        log.error("Program error, exiting.")
+        return 99

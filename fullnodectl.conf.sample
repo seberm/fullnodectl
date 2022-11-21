@@ -9,3 +9,4 @@
 [electrum]
 # Electrum server URL in a format `host:port:protocol`
 ;url = "electrum.example.com:50001:t"
+

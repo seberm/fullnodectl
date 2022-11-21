@@ -92,3 +92,12 @@ set_onion_address(info, "rtl", 80)
 ACTIONS = {
     "info": action_info,
 }
+
+
+# Subparser TODO
+#    subp_node = p_node.add_subparsers(
+#        dest="action",
+#        help="Action name",
+#        required=True,
+#    )
+#    subp_node.add_parser("info", help="Print node information")
