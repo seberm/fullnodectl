@@ -29,33 +29,29 @@ def init_parsers(parser):
     p_block.add_argument("id", help="Block number or a block hash. Without this argument program will return the information about the last block.", nargs="*")
 
 
-def init(args):
-    debug(f"Initializing module: {MODULE_NAME}")
-    debug(f"Module arguments: {args}")
-
-
 def main(args):
     debug(f"Running module {MODULE_NAME}")
+
+    ACTIONS = {
+        "fees": action_fees,
+        "tx": action_tx,
+    }
+    act = ACTIONS.get(args.action)
+    act(args)
 
     return 0
 
 
 MODULE_HOOKS = {
     mod.HOOK_INIT_PARSERS: init_parsers,
-    mod.HOOK_INIT: init,
+    # mod.HOOK_INIT: init,
     mod.HOOK_RUN: main,
 }
 
 
-#def action_fees(args):
-#    print("Fees are ... TODO")
-#
-#
-#def action_tx(args):
-#    print(f"info about tx '{args.txid}' is ... TODO")
-#
-#
-#ACTIONS = {
-#    "fees": action_fees,
-#    "tx": action_tx,
-#}
+def action_fees(args):
+    print("Fees are ... TODO")
+
+
+def action_tx(args):
+    print(f"info about tx '{args.txid}' is ... TODO")
