@@ -1,0 +1,27 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "632fdf676597e7f5a78415097c6db3aa525e821b39e89815e0ff7a6d5b67146e"
+        },
+        "pipfile-spec": 6,
+        "requires": {},
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "https://pypi.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "python-bitcoinlib": {
+            "hashes": [
+                "sha256:61ba514e0d232cc84741e49862dcedaf37199b40bba252a17edc654f63d13f39",
+                "sha256:78bd4ee717fe805cd760dfdd08765e77b7c7dbef4627f8596285e84953756508"
+            ],
+            "index": "pypi",
+            "version": "==0.11.2"
+        }
+    },
+    "develop": {}
+}
