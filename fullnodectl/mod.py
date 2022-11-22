@@ -103,16 +103,16 @@ def get_and_register_available_modules():
     """
     Return list of internal modules which are available and *loadable*.
     """
-    # Set of module files with removed __init__.py file
+    # Set of module files/folders with removed __init__.py file
     module_files = {
-        os.path.basename(f) for f in glob(os.path.join(_INTERNAL_MODS_DIR_PATH, "*.py"))
+        os.path.basename(f) for f in glob(os.path.join(_INTERNAL_MODS_DIR_PATH, "*"))
     } - set([
         "__init__.py",
     ])
 
     # Module tuples minus module name plus its options
     modules_to_register = [
-        (m.split(".")[0], None, ) for m in module_files
+        m.split(".")[0] for m in module_files
     ]
 
     return register_internal_modules(modules_to_register)
@@ -120,10 +120,7 @@ def get_and_register_available_modules():
 
 def register_modules(modules):
     registered_modules = set()
-    for m in modules:
-        module_filename = m[0]
-        module_opts = m[1] if len(m) == 2 else None
-
+    for module_filename in modules:
         try:
             module = load(module_filename)
         except ImportError as e:
@@ -141,11 +138,9 @@ def register_modules(modules):
 
 def register_internal_modules(modules):
     mods_for_registration = set()
-    for m in modules:
-        module_name = m[0]
-        module_opts = m[1] if len(m) == 2 else None
+    for module_name in modules:
         mods_for_registration.add(
-            (os.path.join(_INTERNAL_MODS_DIR_PATH, f"{module_name}.py"), module_opts,)
+            os.path.join(_INTERNAL_MODS_DIR_PATH, module_name)
         )
 
     return register_modules(mods_for_registration)
