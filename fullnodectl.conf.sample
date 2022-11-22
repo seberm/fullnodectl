@@ -14,3 +14,9 @@
 [mempool]
 # Mempool server URL - API endpoint
 ;api_url = "https://mempool.space/api"
+
+
+[node]
+; bitcoin_service = "bitcoind"
+; ln_service = "lnd"
+; electrum_service = "electrs"

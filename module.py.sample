@@ -1,0 +1,31 @@
+"""
+<module description>
+"""
+from fullnodectl import mod
+
+__license__ = "MIT"
+
+MODULE_NAME = "<name>"
+MODULE_AUTHOR = "<author>"
+MODULE_AUTHOR_EMAIL = "<author email>"
+MODULE_DESCRIPTION = __doc__
+
+
+def init_parsers(parser):
+    p_sub = parser.add_subparsers(
+        dest="action",
+        help="Action name",
+        required=True,
+    )
+    p_sub.add_parser("some", help="Some help")
+
+
+def main(args):
+    return 0
+
+
+MODULE_HOOKS = {
+    mod.HOOK_INIT: lambda *args: None,
+    mod.HOOK_INIT_PARSERS: init_parsers,
+    mod.HOOK_RUN: main,
+}

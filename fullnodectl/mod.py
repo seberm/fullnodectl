@@ -61,7 +61,7 @@ def load(filename):
         del sys.path[0]
 
     if not _check_module_format(module):
-        raise ImportError(f"Module {filename} has a bad format.")
+        raise ImportError(f"Module '{module.MODULE_NAME}' (path={filename}) has a bad format.")
 
     log.info(f"Module '{module_str}' ({filename}) successfully loaded.")
     return module
