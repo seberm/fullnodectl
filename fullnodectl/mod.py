@@ -6,7 +6,6 @@ import re
 import importlib
 import logging
 from glob import glob
-from collections import namedtuple
 
 from fullnodectl import errors
 
@@ -20,7 +19,7 @@ HOOK_INIT_PARSERS = "_init_parsers"
 HOOK_INIT = "_init"
 HOOK_RUN = "_run"
 
-_REGISTERED_MODULES = set()
+_REGISTERED_MODULES = {}
 
 
 def _check_module_format(module):
@@ -68,31 +67,36 @@ def load(filename):
     return module
 
 
-def callback(hook, *argv, **kwargs):
-    for module, opts in _REGISTERED_MODULES:
-        try:
-            log.debug(f"Calling '{hook}' callback of '{module.__name__}' module. Args: %s", locals())
-            module.MODULE_HOOKS[hook](*argv, **kwargs)
-        except KeyError:
-            # Ignoring, the hook is not registered in the module
-            pass
+def callback(module, hook, *argv, **kwargs):
+    try:
+        module_obj = _REGISTERED_MODULES[module]
+    except KeyError:
+        raise errors.FullNodeCTLError(f"Unknown module: {module}")
+
+    try:
+        log.debug(f"Calling '{hook}' callback of '{module_obj.__name__}' module. Args: %s", locals())
+        module_obj.MODULE_HOOKS[hook](*argv, **kwargs)
+    except KeyError:
+        # Ignoring, the hook is not registered in the module
+        pass
 
 
-def init(module, opts=None):
-    Module = namedtuple("Module", "module opts")
+def callback_all(hook, *argv, **kwargs):
+    for module in _REGISTERED_MODULES:
+        callback(module.MODULE_NAME, hook, *argv, **kwargs)
 
-    mod_for_registration = Module(module, opts)
 
-    if mod_for_registration in _REGISTERED_MODULES:
-        log.info(f"Module {mod_for_registration} already initialized! Skipping.")
+def init(module_obj):
+    if module_obj.MODULE_NAME in _REGISTERED_MODULES.keys():
+        log.info(f"Module {module_obj.MODULE_NAME} already initialized! Skipping.")
     else:
-        _REGISTERED_MODULES.add(mod_for_registration)
+        _REGISTERED_MODULES[module_obj.MODULE_NAME] = module_obj
 
-    callback(HOOK_INIT, opts)
+    callback(module_obj.MODULE_NAME, HOOK_INIT)
 
 
 def get_loaded_modules():
-    return _REGISTERED_MODULES
+    return _REGISTERED_MODULES.values()
 
 
 def get_and_register_available_modules():
@@ -129,7 +133,7 @@ def register_modules(modules):
             )
 
         # Register module hooks
-        init(module, module_opts)
+        init(module)
         registered_modules.add(module)
 
     return registered_modules

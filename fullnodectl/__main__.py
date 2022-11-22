@@ -9,7 +9,8 @@ from fullnodectl import (
 log = logging.getLogger(__name__)
 
 
-DEFAULT_LOGGING_LEVEL = "DEBUG"
+# DEFAULT_LOGGING_LEVEL = "DEBUG"
+DEFAULT_LOGGING_LEVEL = "WARNING"
 
 
 def main():
@@ -46,17 +47,15 @@ def main():
 
     for module in loaded_modules:
         module_parser = module_subparsers.add_parser(module.MODULE_NAME, help=f"{module.MODULE_NAME} operations")
-        mod.callback(mod.HOOK_INIT_PARSERS, module_parser)
+        mod.callback(module.MODULE_NAME, mod.HOOK_INIT_PARSERS, module_parser)
 
     args = parser.parse_args()
 
     # Setup the logging
     logging.basicConfig(level=args.log)
 
-    mod.callback(mod.HOOK_INIT, args)
-
     try:
-        return mod.callback(mod.HOOK_RUN, args)
+        return mod.callback(args.module, mod.HOOK_RUN, args)
     except errors.FullNodeCTLError as e:
         log.error(e)
         log.error("Program error, exiting.")

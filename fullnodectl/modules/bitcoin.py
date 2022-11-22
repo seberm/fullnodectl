@@ -27,6 +27,7 @@ def init_parsers(parser):
 
     p_block = p_bitcoin.add_parser("block", help="Get information about blocks")
     p_block.add_argument("id", help="Block number or a block hash. Without this argument program will return the information about the last block.", nargs="*")
+    print(f"{__name__}: initializing parsers")
 
 
 def main(args):
@@ -39,12 +40,13 @@ def main(args):
     act = ACTIONS.get(args.action)
     act(args)
 
+    print(f"{__name__}: calling main")
     return 0
 
 
 MODULE_HOOKS = {
+    mod.HOOK_INIT: lambda *args: None,
     mod.HOOK_INIT_PARSERS: init_parsers,
-    # mod.HOOK_INIT: init,
     mod.HOOK_RUN: main,
 }
 
