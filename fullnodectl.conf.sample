@@ -10,3 +10,7 @@
 # Electrum server URL in a format `host:port:protocol`
 ;url = "electrum.example.com:50001:t"
 
+
+[mempool]
+# Mempool server URL - API endpoint
+;api_url = "https://mempool.space/api"
