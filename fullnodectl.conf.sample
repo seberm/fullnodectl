@@ -1,22 +1,22 @@
 [bitcoin]
 # `config_file` and `url` options are mutually exclusive
-;config_file = "~/.bitcoin/bitcoin.conf"
+config_file = "~/.bitcoin/bitcoin.conf"
 
 # URL to bitcoind RPC server, format: `<proto>://<username>:<password>@<hostname>:<port>`
-;url = "http://john:mypassword@localhost:8332"
+#url = "http://john:mypassword@localhost:8332"
 
 
 [electrum]
 # Electrum server URL in a format `host:port:protocol`
-;url = "electrum.example.com:50001:t"
+url = "electrum.example.com:50001:t"
 
 
 [mempool]
 # Mempool server URL - API endpoint
-;api_url = "https://mempool.space/api"
+api_url = "https://mempool.space/api"
 
 
 [node]
-; bitcoin_service = "bitcoind"
-; ln_service = "lnd"
-; electrum_service = "electrs"
+bitcoin_service = "bitcoind"
+ln_service = "lnd"
+electrum_service = "electrs"
