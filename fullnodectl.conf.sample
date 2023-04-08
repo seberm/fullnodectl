@@ -17,6 +17,6 @@ api_url = "https://mempool.space/api"
 
 
 [node]
-bitcoin_service = "bitcoind"
-ln_service = "lnd"
-electrum_service = "electrs"
+service_bitcoin = "bitcoind"
+service_ln = "lnd"
+service_electrum = "electrs"
