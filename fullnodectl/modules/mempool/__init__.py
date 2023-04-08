@@ -24,7 +24,7 @@ def init_parsers(parser):
     p_mempool.add_parser("fees", help="Get current transaction fees")
 
 
-def main(args):
+def main(args, config):
     debug(f"Running module {MODULE_NAME}")
 
     ACTIONS = {
@@ -32,7 +32,7 @@ def main(args):
         "tx": action_tx,
     }
     act = ACTIONS.get(args.action)
-    act(args)
+    act(args, config)
 
     return 0
 
@@ -44,8 +44,8 @@ MODULE_HOOKS = {
 }
 
 
-def action_fees(args):
-    mempool_url = "https://mempool.space/api"
+def action_fees(args, config):
+    mempool_url = config["mempool"]["api_url"]
     api_url = f"{mempool_url}/v1/fees/recommended"
 
     session = requests.Session()
@@ -56,5 +56,5 @@ def action_fees(args):
     print(content)
 
 
-def action_tx(args):
+def action_tx(args, config):
     print("args")

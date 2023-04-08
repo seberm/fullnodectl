@@ -1,9 +1,11 @@
 import argparse
 import logging
+import os
 
 from fullnodectl import (
     mod,
     errors,
+    configurator,
 )
 
 log = logging.getLogger(__name__)
@@ -34,6 +36,9 @@ def main():
         "--config",
         action="store",
         help="Path to configuration file",
+
+        # FIXME: Add possibility to load file from multiple locations
+        default=os.path.join("fullnodectl.conf"),
     )
 
     module_subparsers = parser.add_subparsers(
@@ -54,8 +59,11 @@ def main():
     # Setup the logging
     logging.basicConfig(level=args.log)
 
+    # Load and validate the configuration file, set the defaults
+    cnf = configurator.Config(args.config)
+
     try:
-        return mod.callback(args.module, mod.HOOK_RUN, args)
+        return mod.callback(args.module, mod.HOOK_RUN, args, cnf.config)
     except errors.FullNodeCTLError as e:
         log.error(e)
         log.error("Program error, exiting.")

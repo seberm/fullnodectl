@@ -36,7 +36,7 @@ def init_parsers(parser):
         )
 
 
-def main(args):
+def main(args, config):
     return 0
 
 

@@ -5,5 +5,7 @@ name = "pypi"
 
 [packages]
 python-bitcoinlib = "*"
+requests = "*"
+configobj = "*"
 
 [dev-packages]
