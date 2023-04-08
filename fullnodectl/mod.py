@@ -75,10 +75,12 @@ def callback(module, hook, *argv, **kwargs):
 
     try:
         log.debug(f"Calling '{hook}' callback of '{module_obj.__name__}' module. Args: %s", locals())
-        module_obj.MODULE_HOOKS[hook](*argv, **kwargs)
+        hook = module_obj.MODULE_HOOKS[hook]
     except KeyError:
         # Ignoring, the hook is not registered in the module
         pass
+    else:
+        hook(*argv, **kwargs)
 
 
 def callback_all(hook, *argv, **kwargs):
