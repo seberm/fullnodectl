@@ -33,7 +33,7 @@ def init_parsers(parser):
         p_action = service_subparser.add_parser(action, help=f"{action.capitalize()} node service")
         p_action.add_argument(
             "name",
-            choices=["bitcoin", "ln", "electrum"],
+            choices=["btc", "ln", "electrum"],
         )
 
 

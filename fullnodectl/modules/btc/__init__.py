@@ -6,7 +6,7 @@ Common operations, actions and stats supported by a bitcoin service.
 """
 import logging
 import json
-from binascii import hexlify
+#from binascii import hexlify
 
 from bitcoin import rpc
 
@@ -32,10 +32,6 @@ def init_parsers(parser):
         required=True,
     )
     p_bitcoin.add_parser("fees", help="Get current transaction fees")
-
-    p_tx = p_bitcoin.add_parser("tx", help="Get information about specific transaction by its TXID")
-    p_tx.add_argument("txid", help="Transaction ID (TXID)")
-
     p_block = p_bitcoin.add_parser("block", help="Get information about blocks")
 
     # TODO: Also support block hashes
@@ -51,7 +47,6 @@ def main(args, config):
 
     ACTIONS = {
         "fees": action_fees,
-        "tx": action_tx,
         "block": action_block,
     }
     act = ACTIONS.get(args.action)
@@ -72,7 +67,7 @@ def action_fees(args, config):
 
 
 def action_block(args, config):
-    proxy = rpc.Proxy(config["bitcoin"]["url"])
+    proxy = rpc.Proxy(config["btc"]["url"])
 
     try:
         if not args.block_id:
@@ -106,7 +101,3 @@ def action_block(args, config):
     except rpc.JSONRPCError as e:
         log.error(e)
         raise errors.FullNodeCTLError("There was a problem when connecting to bitcoin RPC.")
-
-
-def action_tx(args, config):
-    print(f"info about tx '{args.txid}' is ... TODO")

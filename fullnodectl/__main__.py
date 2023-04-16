@@ -11,14 +11,13 @@ from fullnodectl import (
 log = logging.getLogger(__name__)
 
 
-# DEFAULT_LOGGING_LEVEL = "DEBUG"
 DEFAULT_LOGGING_LEVEL = "WARNING"
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="TODO",
-        allow_abbrev=False,
+        description="FullNode Control",
+        allow_abbrev=True,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 

@@ -1,7 +1,4 @@
-[bitcoin]
-# `config_file` and `url` options are mutually exclusive
-config_file = "~/.bitcoin/bitcoin.conf"
-
+[btc]
 # URL to bitcoind RPC server, format: `<proto>://<username>:<password>@<hostname>:<port>`
 #url = "http://john:mypassword@localhost:8332"
 

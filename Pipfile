@@ -4,8 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-python-bitcoinlib = "*"
+python-bitcoinlib = "==0.2.*"
+connectrum = "==0.8.*"
+configobj = "==5.*"
 requests = "*"
-configobj = "*"
 
 [dev-packages]
