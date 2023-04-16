@@ -61,8 +61,23 @@ def action_fees(args, config):
 
 
 def action_tx(args, config):
-    print("args")
+    m = mempool.API(config["mempool"]["api_url"])
+    print(json.dumps(m.get_transaction(args.txid), indent=2))
 
 
 def action_block(args, config):
-    print("args")
+    m = mempool.API(config["mempool"]["api_url"])
+
+    # Get the latest tip block by default
+    if not args.block_id:
+        args.block_id = [m.block_tip_hash]
+
+    for block_id in args.block_id:
+        # Handle the block height if hash is not provided
+        try:
+            block_height = int(block_id)
+            block_hash = m.get_block_by_height(block_height)
+        except ValueError:
+            block_hash = block_id
+
+        print(json.dumps(m.get_block_by_hash(block_hash), indent=2))
