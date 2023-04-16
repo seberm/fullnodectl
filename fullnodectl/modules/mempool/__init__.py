@@ -22,6 +22,7 @@ def init_parsers(parser):
         required=True,
     )
     p_mempool.add_parser("fees", help="Get current transaction fees")
+    p_mempool.add_parser("difficulty", help="Get difficulty adjustment")
 
     p_tx = p_mempool.add_parser("tx", help="Get information about specific transaction by its TXID")
     p_tx.add_argument("txid", help="Transaction ID (TXID)")
@@ -39,6 +40,7 @@ def main(args, config):
 
     ACTIONS = {
         "fees": action_fees,
+        "difficulty": action_difficulty,
         "tx": action_tx,
         "block": action_block,
     }
@@ -58,6 +60,11 @@ MODULE_HOOKS = {
 def action_fees(args, config):
     m = mempool.API(config["mempool"]["api_url"])
     print(json.dumps(m.recommended_fees, indent=2))
+
+
+def action_difficulty(args, config):
+    m = mempool.API(config["mempool"]["api_url"])
+    print(json.dumps(m.difficulty_adjustment, indent=2))
 
 
 def action_tx(args, config):

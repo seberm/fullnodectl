@@ -94,6 +94,7 @@ def action_block(args, config):
             "nNonce": header.nNonce,
             "nTime": header.nTime,
             "nVersion": header.nVersion,
+            "difficulty": block.difficulty,
             #"size": "",
             #"weight": "",
 

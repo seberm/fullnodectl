@@ -19,6 +19,7 @@ def init_parsers(parser):
     )
     p_node.add_parser("status", help="Show current status of services")
     p_node.add_parser("ps", help="Show services and its resources")
+    p_node.add_parser("info", help="Show info about installed services, their versions etc.")
 
     actions = ["start", "stop", "enable", "disable"]
     service_parser = p_node.add_parser("service", help="Control services")
