@@ -1,11 +1,11 @@
 """
 Various actions, oprations and stats provided by a mempool.
 """
-import requests
-import json
 from logging import debug
+import json
 
 from fullnodectl import mod
+from fullnodectl.modules.mempool import mempool
 
 __license__ = "MIT"
 
@@ -23,6 +23,16 @@ def init_parsers(parser):
     )
     p_mempool.add_parser("fees", help="Get current transaction fees")
 
+    p_tx = p_mempool.add_parser("tx", help="Get information about specific transaction by its TXID")
+    p_tx.add_argument("txid", help="Transaction ID (TXID)")
+
+    p_block = p_mempool.add_parser("block", help="Get information about blocks")
+    p_block.add_argument(
+        "block_id",
+        help="Block number of a hash. Without this argument program will return the information about the last block.",
+        nargs="*",
+    )
+
 
 def main(args, config):
     debug(f"Running module {MODULE_NAME}")
@@ -30,6 +40,7 @@ def main(args, config):
     ACTIONS = {
         "fees": action_fees,
         "tx": action_tx,
+        "block": action_block,
     }
     act = ACTIONS.get(args.action)
     act(args, config)
@@ -45,16 +56,13 @@ MODULE_HOOKS = {
 
 
 def action_fees(args, config):
-    mempool_url = config["mempool"]["api_url"]
-    api_url = f"{mempool_url}/v1/fees/recommended"
-
-    session = requests.Session()
-
-    response = session.get(api_url, verify=True)
-    content = json.loads(response.content.decode("utf-8"))
-
-    print(content)
+    m = mempool.API(config["mempool"]["api_url"])
+    print(json.dumps(m.recommended_fees, indent=2))
 
 
 def action_tx(args, config):
+    print("args")
+
+
+def action_block(args, config):
     print("args")
