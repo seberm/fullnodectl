@@ -19,6 +19,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="TODO",
         allow_abbrev=False,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
     parser.add_argument(
@@ -51,7 +52,7 @@ def main():
     loaded_modules = mod.get_and_register_available_modules()
 
     for module in loaded_modules:
-        module_parser = module_subparsers.add_parser(module.MODULE_NAME, help=f"{module.MODULE_NAME} operations")
+        module_parser = module_subparsers.add_parser(module.MODULE_NAME, help=module.MODULE_DESCRIPTION.split("\n", maxsplit=2)[1])
         mod.callback(module.MODULE_NAME, mod.HOOK_INIT_PARSERS, module_parser)
 
     args = parser.parse_args()

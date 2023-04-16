@@ -1,5 +1,5 @@
 """
-Module description TODO
+Various actions, oprations and stats provided by a mempool.
 """
 import requests
 import json

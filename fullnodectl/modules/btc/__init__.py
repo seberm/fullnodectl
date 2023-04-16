@@ -1,10 +1,12 @@
 """
-Module description TODO
+Common operations, actions and stats supported by a bitcoin service.
 
 # Refs.:
 # - https://github.com/petertodd/python-bitcoinlib/blob/master/bitcoin/rpc.py
 """
 import logging
+import json
+from binascii import hexlify
 
 from bitcoin import rpc
 
@@ -78,8 +80,28 @@ def action_block(args, config):
             args.block_id.append(proxy.getblockcount())
 
         #block_hash = bytes(args.hash[0], "UTF-8")
-        block_hash = proxy.getblockhash(int(args.block_id[0]))
-        print(proxy.getblock(block_hash))
+        block_id = int(args.block_id[0])
+        block_hash = proxy.getblockhash(block_id)
+        block = proxy.getblock(block_hash)
+        header = block.get_header()
+
+        out = {
+            "id": block_id,
+            # FIXME
+            #"hash": hexlify(block_hash).decode("UTF-8"),
+            #"hashPrevBlock": hexlify(header.hashPrevBlock).decode("UTF-8"),
+            "nBits": header.nBits,
+            "nNonce": header.nNonce,
+            "nTime": header.nTime,
+            "nVersion": header.nVersion,
+            #"size": "",
+            #"weight": "",
+
+            #"vtx" :
+            #"coinbase" : block.vtx[0],
+            #coinbase_opreturn_data (coinbase data)
+        }
+        print(json.dumps(out, indent=2))
     except rpc.JSONRPCError as e:
         log.error(e)
         raise errors.FullNodeCTLError("There was a problem when connecting to bitcoin RPC.")

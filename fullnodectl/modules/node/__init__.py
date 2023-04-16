@@ -1,5 +1,5 @@
 """
-<module description>
+Use this module to manage your full node.
 """
 from fullnodectl import mod
 
