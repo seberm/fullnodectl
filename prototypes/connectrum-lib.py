@@ -74,7 +74,7 @@ def main():
     svr = ServerInfo(args.server, args.server,
                     ports=((args.protocol+str(args.port)) if args.port else args.protocol))
 
-    loop = asyncio.get_event_loop()  
+    loop = asyncio.get_event_loop()
 
     conn = StratumClient()
     connector = conn.connect(svr, args.protocol, use_tor=svr.is_onion, disable_cert_verify=True, short_term=True)
@@ -85,5 +85,5 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
+
 # EOF
