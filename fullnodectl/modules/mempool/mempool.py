@@ -1,10 +1,17 @@
 import json
+import logging
 import requests
+
+from fullnodectl import errors
+
+
+log = logging.getLogger(__name__)
 
 
 class API:
-    def __init__(self, api_url):
+    def __init__(self, api_url, ssl_verify=True):
         self.api_url = api_url
+        self.ssl_verify = ssl_verify
         self._session = None
 
     @property
@@ -15,8 +22,17 @@ class API:
         return self._session
 
     def _get(self, endpoint):
-        response = self.session.get(f"{self.api_url}/{endpoint}", verify=True)
-        return json.loads(response.content.decode("UTF-8"))
+        response = self.session.get(f"{self.api_url}/{endpoint}", verify=self.ssl_verify)
+        content = response.content.decode("UTF-8")
+
+        if response.status_code != 200:
+            log.error(content)
+            raise errors.FullNodeCTLError(f"Mempool responded with HTTP code: {response.status_code}")
+
+        try:
+            return json.loads(content)
+        except json.decoder.JSONDecodeError:
+            return content
 
     @property
     def recommended_fees(self):
