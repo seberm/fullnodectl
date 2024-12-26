@@ -1,7 +1,6 @@
 # FullNodeCTL - Your Bitcoin/Lightning Ultimate Tool
-=====================================================
 
-** This project is a draft **
+** This project is a draft and it's still under design **
 
 
 
